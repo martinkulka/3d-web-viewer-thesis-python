@@ -1,13 +1,13 @@
 import os
 import shutil
 from fastapi import FastAPI, File, UploadFile, Form
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fast_marching import fast_marching_segmentation
 
 app = FastAPI()
 
-origins = ["http://localhost/", "http://localhost:5173/"]
+origins = ["http://localhost/", "http://localhost:5173/", "http://127.0.0.1:5173"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,16 +17,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/api/fast_marching/")
-async def segment_using_fast_marching(input_file: UploadFile = File(...), seed: str = Form(...)):
-    input_file_name = "input.nii.gz"
+input_file_name = "input.nii.gz"
+
+@app.put("/api/set_input_file")
+async def set_input_file(input_file: UploadFile = File(...)):
     file_path = os.path.join(os.getcwd(), input_file_name)
 
     with open(file_path, "wb") as f:
         shutil.copyfileobj(input_file.file, f)
+    
+    return 'received'
 
+@app.get("/api/input_file")
+async def get_input_file():
+    return FileResponse(input_file_name, media_type="application/gzip", filename="current_file.nii.gz")
+
+@app.post("/api/fast_marching/")
+async def segment_using_fast_marching(seed: str = Form(...)):
+    segmentation_file_name = "segmentation.nii.gz"
     seed_tuple =  tuple(int(coordinate) for coordinate in seed.split(" "))
 
-    fast_marching_segmentation(input_file_name, input_file_name, 1.0, -0.5, 3.0, 100, 110, [seed_tuple])
+    fast_marching_segmentation(input_file_name, segmentation_file_name, 1.0, -0.5, 3.0, 100, 110, [seed_tuple])
 
-    return FileResponse(input_file_name, media_type="application/x-gzip", filename="modified_image.nii.gz")
+    return FileResponse(segmentation_file_name, media_type="application/gzip", filename="segmentation.nii.gz")
