@@ -26,9 +26,9 @@ async def set_input_file(input_file: UploadFile = File(...)):
     
     return 'received'
 
-@app.get("/api/input_file")
+@app.get("/api/input_file.nii.gz")
 async def get_input_file():
-    return FileResponse(input_file_name, media_type="application/gzip", filename="current_file.nii.gz")
+    return FileResponse(input_file_name, media_type="application/gzip", filename="input_file.nii.gz")
 
 @app.post("/api/fast_marching/")
 async def segment_using_fast_marching(seed: str = Form(...)):
