@@ -2,7 +2,7 @@ import SimpleITK as sitk
 
 def fast_marching_segmentation(input_filename, output_filename, sigma, alpha, beta, time_threshold, stopping_time, seeds):
     #'BrainProtonDensitySlice.png', 'fastMarchingOutput.mha', 81 114 1.0 -0.5 3.0 100 110)
-    # 117, 174, 125
+    # 117 174 125
     inputImage = sitk.ReadImage(input_filename, sitk.sitkFloat32)
 
     smoothing = sitk.CurvatureAnisotropicDiffusionImageFilter()
