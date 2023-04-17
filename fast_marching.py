@@ -4,6 +4,7 @@ def fast_marching_segmentation(input_filename, output_filename, sigma, alpha, be
     #'BrainProtonDensitySlice.png', 'fastMarchingOutput.mha', 81 114 1.0 -0.5 3.0 100 110)
     # 117 174 125
     inputImage = sitk.ReadImage(input_filename, sitk.sitkFloat32)
+    dimensionOffset = int(inputImage.GetSize()[0])
 
     smoothing = sitk.CurvatureAnisotropicDiffusionImageFilter()
     smoothing.SetTimeStep(0.02)
@@ -27,7 +28,7 @@ def fast_marching_segmentation(input_filename, output_filename, sigma, alpha, be
     seedValue = 0
 
     for seed in seeds:
-        trialPoint = (seed[0], seed[1], seed[2], seedValue)
+        trialPoint = (dimensionOffset - seed[0], seed[1], seed[2], seedValue)
         fastMarching.AddTrialPoint(trialPoint)
 
     fastMarching.SetStoppingValue(stopping_time)
