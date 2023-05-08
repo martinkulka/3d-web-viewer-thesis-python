@@ -19,6 +19,14 @@ docs/_build/
 .vscode
 __pycache__
 *.nii.gz
+zoo_dir/
+configs/
+docs/
+dataset/
+models/
+scripts/
+eval/
+LICENSE
 
 # Coverage reports
 htmlcov/

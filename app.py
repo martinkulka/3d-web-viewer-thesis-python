@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fast_marching import fast_marching_segmentation
 from utils import get_seeds_from_seed_string
+from segmentation_unest import segmentation_unest
 
 app = FastAPI()
 
@@ -74,3 +75,10 @@ async def get_segmentation():
         media_type="application/gzip",
         filename="segmentation.nii.gz",
     )
+
+
+@app.post("/api/wholebrain_unest/")
+async def segment_brain_unest():
+    result = await segmentation_unest();
+
+    return "wholebrain_unest successful"
