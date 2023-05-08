@@ -4,7 +4,12 @@ from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import FileResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fast_marching import fast_marching_segmentation
-from utils import get_seeds_from_seed_string
+from utils import (
+    get_seeds_from_seed_string,
+    rename_segmented_file,
+    replace_segmented_file,
+    replace_input_file_to_segment
+)
 from segmentation_unest import segmentation_unest
 
 app = FastAPI()
@@ -79,6 +84,11 @@ async def get_segmentation():
 
 @app.post("/api/wholebrain_unest/")
 async def segment_brain_unest():
-    result = await segmentation_unest();
+    replace_input_file_to_segment()
+
+    result = await segmentation_unest()
+
+    rename_segmented_file()
+    replace_segmented_file()
 
     return "wholebrain_unest successful"
