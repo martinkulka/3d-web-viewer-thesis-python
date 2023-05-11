@@ -28,7 +28,7 @@ def fast_marching_segmentation(input_filename, output_filename, sigma, alpha, be
     seedValue = 0
 
     for seed in seeds:
-        trialPoint = (dimensionOffset - seed[0], seed[1], seed[2], seedValue)
+        trialPoint = (seed[0], seed[1], seed[2], seedValue)
         fastMarching.AddTrialPoint(trialPoint)
 
     fastMarching.SetStoppingValue(stopping_time)
