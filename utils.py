@@ -30,13 +30,19 @@ def rename_segmented_file():
 
 def replace_segmented_file():
     file_path = os.path.join(os.getcwd(), "eval", "input", "segmentation.nii.gz")
-    destination_file_path = renamed_file_path = os.path.join(os.getcwd(), "segmentation.nii.gz")
+    destination_file_path = os.path.join(os.getcwd(), "segmentation.nii.gz")
 
     os.replace(file_path, destination_file_path)
 
+def rename_registration_file():
+    file_path = os.path.join(os.getcwd(), "dataset", "images", "output.nii.gz")
+    renamed_file_path = os.path.join(os.getcwd(), "dataset", "images", "input.nii.gz")
 
-def replace_input_file_to_segment():
-    file_path = os.path.join(os.getcwd(), "input.nii.gz")
+    os.rename(file_path, renamed_file_path)
+
+
+def replace_input_file_to_segment(file_name):
+    file_path = os.path.join(os.getcwd(), file_name)
     destination_file_path = os.path.join(os.getcwd(), "dataset", "images", "input.nii.gz")
 
     if os.path.exists(destination_file_path):

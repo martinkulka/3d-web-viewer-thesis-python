@@ -8,9 +8,11 @@ from utils import (
     get_seeds_from_seed_string,
     rename_segmented_file,
     replace_segmented_file,
-    replace_input_file_to_segment
+    replace_input_file_to_segment,
+    rename_registration_file
 )
 from segmentation_unest import segmentation_unest
+from register_image import register_image
 
 app = FastAPI()
 
@@ -83,8 +85,13 @@ async def get_segmentation():
 
 
 @app.post("/api/wholebrain_unest/")
-async def segment_brain_unest():
-    replace_input_file_to_segment()
+async def segment_brain_unest(registration: str = Form(...)):
+    if registration == "true":
+        register_image("mni_icbm152_t1_tal_nlin_sym_09c.nii.gz", "input.nii.gz")
+        replace_input_file_to_segment("output.nii.gz")
+        rename_registration_file()
+    else:
+        replace_input_file_to_segment("input.nii.gz")
 
     result = await segmentation_unest()
 
