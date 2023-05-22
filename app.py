@@ -12,6 +12,7 @@ from utils import (
     rename_registration_file
 )
 from segmentation_unest import segmentation_unest
+from segmentation_spleen import segmentation_spleen
 from register_image import register_image
 
 app = FastAPI()
@@ -86,16 +87,31 @@ async def get_segmentation():
 
 @app.post("/api/wholebrain_unest/")
 async def segment_brain_unest(registration: str = Form(...)):
+    model = "wholeBrainSeg_Large_UNEST_segmentation"
+
     if registration == "true":
         register_image("mni_icbm152_t1_tal_nlin_sym_09c.nii.gz", "input.nii.gz")
-        replace_input_file_to_segment("output.nii.gz")
-        rename_registration_file()
+        replace_input_file_to_segment("output.nii.gz", model)
+        rename_registration_file(model)
     else:
-        replace_input_file_to_segment("input.nii.gz")
+        replace_input_file_to_segment("input.nii.gz", model)
 
-    result = await segmentation_unest()
+    result = await segmentation_unest(model)
 
-    rename_segmented_file()
-    replace_segmented_file()
+    rename_segmented_file(model)
+    replace_segmented_file(model)
 
     return "wholebrain_unest successful"
+
+@app.post("/api/spleen_ct_segmentation/")
+async def segment_spleen():
+    model = "spleen_ct_segmentation"
+
+    replace_input_file_to_segment("input.nii.gz", model)
+
+    result = await segmentation_spleen(model)
+
+    rename_segmented_file(model)
+    replace_segmented_file(model)
+
+    return "spleen succesful"

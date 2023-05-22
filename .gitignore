@@ -27,6 +27,7 @@ models/
 scripts/
 eval/
 LICENSE
+monaimodels/
 
 # Coverage reports
 htmlcov/

@@ -1,7 +1,14 @@
 import subprocess
+import os
+from utils import get_model_path
 
 
-async def segmentation_unest():
+async def segmentation_unest(model):
+    model_path = get_model_path(model)
+    metadata_path = os.path.join(os.getcwd(), "monaimodels", "wholeBrainSeg_Large_UNEST_segmentation", "configs", "metadata.json")
+    inference_path = os.path.join(os.getcwd(), "monaimodels", "wholeBrainSeg_Large_UNEST_segmentation", "configs", "inference.json")
+    logging_path = os.path.join(os.getcwd(), "monaimodels", "wholeBrainSeg_Large_UNEST_segmentation", "configs", "logging.conf")
+
     runInferenceCommand = [
         "python",
         "-m",
@@ -9,11 +16,13 @@ async def segmentation_unest():
         "run",
         "evaluating",
         "--meta_file",
-        "./configs/metadata.json",
+        f"./monaimodels/{model}/configs/metadata.json",
         "--config_file",
-        "./configs/inference.json",
+        f"./monaimodels/{model}/configs/inference.json",
         "--logging_file",
-        "./configs/logging.conf",
+        f"./monaimodels/{model}/configs/logging.conf",
+        "--bundle_root",
+        model_path
     ]
 
     return subprocess.run(
