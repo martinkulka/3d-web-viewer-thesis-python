@@ -28,6 +28,7 @@ scripts/
 eval/
 LICENSE
 monaimodels/
+!mni_icbm152_t1_tal_nlin_sym_09c.nii.gz
 
 # Coverage reports
 htmlcov/
